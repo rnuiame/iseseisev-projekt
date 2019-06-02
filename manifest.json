@@ -1,0 +1,21 @@
+{
+  "short_name": "Typeing",
+  "name": "Iseseisev projekt",
+  "icons": [
+    {
+      "src": "192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "type_game/index.html",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "",
+  "theme_color": "#3367D6"
+}
