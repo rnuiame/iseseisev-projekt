@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Iseseisev</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="main.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="index.js"></script>
+
+<link rel="manifest" href="/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/192.png">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+
+<div class="centerDiv">
+
+  <div class="headerDiv">
+    <a class="header">Iseseisev töö</a>
+  </div>
+
+  <div class="centerDiv">
+    <a class="textToType" id="currentWord"></a>
+    <input class="textfield" id="wordField" placeholder="..."/>
+    <a class="button" id="startBtn">Start</a>
+    <a id="timer"></a>
+    <a id="wpm"></a>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+ if ('serviceWorker' in navigator) {
+    console.log("Will the service worker register?");
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(reg){
+        console.log("Yes, it did.");
+     }).catch(function(err) {
+        console.log("No it didn't. This happened:", err)
+    });
+ }
+</script>
+
+</body>
+</html>
