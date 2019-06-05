@@ -1,6 +1,8 @@
 var inGame = false;
 var currentWord, goodAnswers, previousWord;
 var timer, time;
+var a = new Game();
+$("#reloadBtn").hide();
 
 
 $(document).ready(function() {
@@ -38,7 +40,7 @@ function stopGame () {
 
   clearInterval(timer);
   $("#timer").hide();
-  $("#startBtn").show();
+  $("#reloadBtn").show();
   $("#wordField").val("");
 
   inGame = false;
@@ -46,6 +48,9 @@ function stopGame () {
   $("#currentWord").html("<strong>Time is up!</strong>");
   $("#wpm").html('<strong>Words per minute: '+goodAnswers+'</strong>');
 
+
+
+  a.startGameB();
 }
 
 function startTimer() {
@@ -95,6 +100,93 @@ function pickWord () {
     $("#currentWord").html("<strong>"+currentWord+"</strong>");
   }
 }
+
+function fadeColor(id, property, color) {
+    var oProperty = $('#'+id).css(property);
+
+    $('#'+id).css(property, color);
+    setTimeout(function() {
+      $('#'+id).css(property, oProperty);
+    },100);
+}
+
+function Game(){
+  this.density = null;
+  this.canvasElement = document.getElementById('canvas');
+  this.updateTime = null;
+  this.densityStep = null;
+  this.balloonsArray = null;
+  var thiz = this;
+  this.updater = function(){
+    thiz.updateGame();
+  };
+}
+Game.prototype.startGameB = function(){
+  setInterval(this.updater, this.updateTime);
+  setInterval(this.counter, this.updateTime);
+};
+Game.prototype.updateGame = function(){
+  this.densityStep += this.density;
+  if(this.densityStep >= 1 && this.balloonsArray.length < 100)
+  {
+    for(var i = 0; i < parseInt(this.densityStep, 10); i++)
+    {
+      var tempBalloon = new Balloon(0, -53, 'green');
+      tempBalloon.positionX = tempBalloon.generateRandomXPos();
+      //console.log(tempBalloon.positionX);
+      var el = document.createElement('div');
+      el.className = 'balloon '+ tempBalloon.color;
+      el.style.left = tempBalloon.positionX+'px';
+      el.style.bottom = tempBalloon.positionY+'px';
+      el.onclick = function(){
+        this.parentNode.removeChild(el);
+        console.log(Math.round(c * 100) / 100);
+        console.log("vahe on " + (Math.round((c - y) * 100) / 100));
+        y = c;
+      };
+      this.canvasElement.appendChild(el);
+      var tempObj = {};
+      tempObj.el = el;
+      tempObj.speed = tempBalloon.getRandomSpeed();
+      this.balloonsArray.push(tempObj);
+    }
+    this.densityStep = 0;
+  }
+  for(var j = 0; j < this.balloonsArray.length; j++)
+  {
+    this.balloonsArray[j].el.style.bottom = (parseInt(this.balloonsArray[j].el.style.bottom, 10)+(2+this.balloonsArray[j].speed))+'px';
+  }
+};
+Game.prototype.initGame = function(){
+  this.density = 1;
+  this.updateTime = 50;
+  this.densityStep = 1;
+  this.balloonsArray = [];
+};
+function Balloon(x, y, color){
+  this.positionX = x;
+  this.positionY = y;
+  this.color = color;
+}
+Balloon.prototype.getRandomSpeed = function(){
+  return Math.floor(Math.random() * 10);
+};
+Balloon.prototype.generateRandomXPos = function(){
+  return Math.floor(Math.random() * 1350);
+};
+
+window.addEventListener('load',function(){
+  a.initGame();
+  document.getElementById('reloadBtn').onclick = function(){
+    location.reload();
+  };
+});
+var c = 0;
+var y = 0;
+var x = 0.05;
+Game.prototype.counter = function(){
+  c = c + x;
+};
 
 var words = ['ACCOUNT','ACCURATE','ACRES','ACROSS','ACT','ACTION','ACTIVE','ACTIVITY',
   'ACTUAL','ACTUALLY','ADD','ADDITION','ADDITIONAL','ADJECTIVE','ADULT','ADVENTURE',
@@ -339,12 +431,3 @@ var words = ['ACCOUNT','ACCURATE','ACRES','ACROSS','ACT','ACTION','ACTIVE','ACTI
   'WRAPPED','WRITE','WRITER','WRITING','WRITTEN','WRONG','WROTE','YARD',
   'YEAR','YELLOW','YES','YESTERDAY','YET','YOU','YOUNG','YOUNGER',
   'YOUR','YOURSELF','YOUTH','ZERO','ZOO'];
-
-function fadeColor(id, property, color) {
-    var oProperty = $('#'+id).css(property);
-
-    $('#'+id).css(property, color);
-    setTimeout(function() {
-      $('#'+id).css(property, oProperty);
-    },100);
-}
